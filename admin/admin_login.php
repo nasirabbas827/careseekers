@@ -1,0 +1,67 @@
+<?php
+session_start();
+include('config.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    // Assuming you have an "admins" table with fields "username" and "password"
+    $sql = "SELECT id FROM admins WHERE username = '$username' AND password = '$password'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc();
+        $_SESSION["usertype"] = "admin";
+        $_SESSION["userid"] = $row["id"];
+        header("Location: admin_home.php"); 
+        exit;
+    } else {
+        $error = "Invalid username or password.";
+    }
+}
+
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+ body{
+            background-color: aquamarine;
+        }
+h1, h2, h3, h4{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form class="login-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+            <h2 class="mb-4">Admin Login</h2>
+            <?php if (isset($error)) { ?>
+                <p class="text-danger"><?php echo $error; ?></p>
+            <?php } ?>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+
+    <!-- Add Bootstrap JS scripts at the end of the body -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
