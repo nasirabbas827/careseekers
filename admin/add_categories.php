@@ -29,28 +29,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['category_name'])) {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Home</title>
-</head>
+    <title>Admin Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+    body{
+        background-color: aquamarine;
+    }
+    h1, h2, h3, h4{
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+        border: 1px solid #dee2e6;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+    }
+
+    .table img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    .btn-primary {
+        padding: 5px 10px;
+    }
+
+</style>
+
+  </head>
 <body>
 <?php include('admin_navbar.php'); ?>
 
+<div class="container mt-4">
+    <h3>Add Category</h3>
+    <?php
+    if (isset($category_added)) {
+        echo "<p class='text-success'>Category added successfully!</p>";
+    } elseif (isset($category_error)) {
+        echo "<p class='text-danger'>$category_error</p>";
+    }
+    ?>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+        <div class="form-group">
+            <label for="category_name">Category Name:</label>
+            <input type="text" class="form-control" id="category_name" name="category_name" required>
+        </div>
+        <button type="submit" class="btn btn-primary mr-4 ">Add Category</button>
+    <a href="view_categories.php" class="btn btn-success">View Categories</a>
+
+    </form>
   
-  <h3>Add Category</h3>
-  <?php
-  if (isset($category_added)) {
-      echo "<p style='color: green;'>Category added successfully!</p>";
-  } elseif (isset($category_error)) {
-      echo "<p style='color: red;'>$category_error</p>";
-  }
-  ?>
-  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-    <label for="category_name">Category Name:</label>
-    <input type="text" id="category_name" name="category_name" required><br><br>
-    
-    <input type="submit" value="Add Category">
-  </form>
-  
-  <br>
-  <a href="view_categories.php">View Categories</a>
+   
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

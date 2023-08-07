@@ -2,19 +2,20 @@
 session_start();
 include('config.php');
 
-// Check if the user is logged in as an admin
-if (!isset($_SESSION["usertype"]) || $_SESSION["usertype"] !== "admin") {
-    header("Location: admin_login.php");
+// Check if the user is logged in as a care seeker
+if (!isset($_SESSION["usertype"]) || $_SESSION["usertype"] !== "care_seeker") {
+    header("Location: care_seeker_login.php");
     exit;
 }
 
-// Fetch accepted job details
-$select_accepted_jobs_query = "SELECT ja.*, j.required_service, cs.full_name AS careseeker_name, cs.email AS careseeker_email, cs.contact_number AS careseeker_contact, 
-                               sw.full_name AS worker_name, sw.email AS worker_email, sw.contact_number AS worker_contact
+$care_seeker_id = $_SESSION["user_id"];
+
+// Fetch accepted job details for the care seeker
+$select_accepted_jobs_query = "SELECT ja.*, j.required_service, sw.full_name AS worker_name, sw.picture AS worker_picture, sw.hourly_rate AS worker_hourly_rate, sw.email AS worker_email, sw.contact_number AS worker_contact
                                FROM job_accepted ja
                                INNER JOIN jobs j ON ja.job_id = j.id
-                               INNER JOIN care_seekers cs ON ja.careseeker_id = cs.id
                                INNER JOIN support_workers sw ON ja.worker_id = sw.id
+                               WHERE ja.careseeker_id = $care_seeker_id
                                ORDER BY ja.accepted_date DESC";
 $accepted_jobs_result = $conn->query($select_accepted_jobs_query);
 $accepted_jobs = [];
@@ -33,7 +34,6 @@ $conn->close();
 <head>
     <title>Accepted Jobs</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
     <style>
     body{
         background-color: aquamarine;
@@ -79,21 +79,20 @@ $conn->close();
 
 </head>
 <body>
-<?php include('admin_navbar.php'); ?>
+<?php include('navbar.php'); ?>
 
 <div class="container mt-4">
-    <h3>View Accepted Jobs Information</h3>
+    <h3>Accepted Jobs</h3>
 
-    <div class="table-responsive mt-4">
+    <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="thead-light">
                 <tr>
                     <th>Job ID</th>
                     <th>Required Service</th>
-                    <th>Care Seeker Name</th>
-                    <th>Care Seeker Email</th>
-                    <th>Care Seeker Contact</th>
                     <th>Assigned Support Worker</th>
+                    <th>Worker Picture</th>
+                    <th>Hourly Rate</th>
                     <th>Worker Email</th>
                     <th>Worker Contact</th>
                     <th>Accepted Date</th>
@@ -104,10 +103,9 @@ $conn->close();
                     <tr>
                         <td><?php echo $job['job_id']; ?></td>
                         <td><?php echo $job['required_service']; ?></td>
-                        <td><?php echo $job['careseeker_name']; ?></td>
-                        <td><?php echo $job['careseeker_email']; ?></td>
-                        <td><?php echo $job['careseeker_contact']; ?></td>
                         <td><?php echo $job['worker_name']; ?></td>
+                        <td><img src="../<?php echo $job['worker_picture']; ?>" alt="Worker Picture" width="50"></td>
+                        <td>$<?php echo $job['worker_hourly_rate']; ?></td>
                         <td><?php echo $job['worker_email']; ?></td>
                         <td><?php echo $job['worker_contact']; ?></td>
                         <td><?php echo $job['accepted_date']; ?></td>
@@ -116,11 +114,11 @@ $conn->close();
             </tbody>
         </table>
     </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

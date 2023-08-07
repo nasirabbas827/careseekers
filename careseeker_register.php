@@ -35,39 +35,101 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
     <title>Care Seeker Registration</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+    body{
+        background-color: aquamarine;
+    }
+    h1, h2, h3, h4{
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+        border: 1px solid #dee2e6;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+    }
+
+    .table img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    .btn-primary {
+        padding: 5px 10px;
+    }
+
+</style>
+
 </head>
 <body>
 <?php include('navbar.php'); ?>
 
-<h3>Care Seeker Registration</h3>
+<div class="container mt-5">
+    <h3 class="mb-3">Care Seeker Registration</h3>
 
-<?php
-if (isset($registration_success)) {
-    echo "<p style='color: green;'>Registration submitted successfully! Awaiting approval.</p>";
-} elseif (isset($registration_error)) {
-    echo "<p style='color: red;'>$registration_error</p>";
-} elseif (isset($existing_error)) {
-    echo "<p style='color: red;'>$existing_error</p>";
-}
-?>
+    <?php
+    if (isset($registration_success)) {
+        echo "<p style='color: green;'>Registration submitted successfully! Awaiting approval.</p>";
+    } elseif (isset($registration_error)) {
+        echo "<p style='color: red;'>$registration_error</p>";
+    } elseif (isset($existing_error)) {
+        echo "<p style='color: red;'>$existing_error</p>";
+    }
+    ?>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-    <label for="full_name">Full Name:</label>
-    <input type="text" id="full_name" name="full_name" required><br><br>
-    
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    
-    <label for="contact_number">Contact Number:</label>
-    <input type="tel" id="contact_number" name="contact_number" required><br><br>
-    
-    <label for="address">Address:</label>
-    <textarea id="address" name="address" required></textarea><br><br>
-    
-    <input type="submit" value="Register">
-</form>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" class="form-control" id="full_name" name="full_name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="contact_number">Contact Number:</label>
+            <input type="tel" class="form-control" id="contact_number" name="contact_number" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea class="form-control" id="address" name="address" required></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+<!-- Add Bootstrap JS and Popper.js (for dropdowns, tooltips, and popovers) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

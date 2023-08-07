@@ -2,30 +2,16 @@
 session_start();
 include('config.php');
 
-// Check if the user is logged in as an admin
-if (!isset($_SESSION["usertype"]) || $_SESSION["usertype"] !== "admin") {
-    header("Location: admin_login.php");
+// Check if the user is logged in as a care seeker
+if (!isset($_SESSION["usertype"]) || $_SESSION["usertype"] !== "care_seeker") {
+    header("Location: care_seeker_login.php");
     exit;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) {
-    $job_id = $_POST['job_id'];
-    $new_status = $_POST['new_status'];
+$care_seeker_id = $_SESSION["user_id"];
 
-    // Update job status in the database
-    $update_query = "UPDATE jobs SET status = '$new_status' WHERE id = $job_id";
-
-    if ($conn->query($update_query) === TRUE) {
-        $status_updated = true;
-    } else {
-        $status_update_error = "Error updating status: " . $conn->error;
-    }
-}
-
-// Fetch jobs and related care seeker names from the database
-$select_jobs_query = "SELECT jobs.id, jobs.required_service, jobs.detail, jobs.address, jobs.estimated_hourly_budget, jobs.time_of_service, jobs.status, care_seekers.full_name
-                      FROM jobs
-                      JOIN care_seekers ON jobs.care_seeker_id = care_seekers.id";
+// Fetch posted jobs for the care seeker from the database
+$select_jobs_query = "SELECT * FROM jobs WHERE care_seeker_id = $care_seeker_id";
 $jobs_result = $conn->query($select_jobs_query);
 $jobs = [];
 
@@ -41,7 +27,7 @@ $conn->close();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manage Jobs</title>
+    <title>View Jobs</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
     body{
@@ -88,66 +74,44 @@ $conn->close();
 
 </head>
 <body>
-<?php include('admin_navbar.php'); ?>
+<?php include('navbar.php'); ?>
 
 <div class="container mt-4">
-    <h3>Manage Jobs</h3>
-    <?php
-    if (isset($status_updated)) {
-        echo "<p class='text-success'>Status updated successfully!</p>";
-    } elseif (isset($status_update_error)) {
-        echo "<p class='text-danger'>$status_update_error</p>";
-    }
-    ?>
+    <h3>View Posted Jobs</h3>
 
-    <div class="table-responsive mt-4">
+    <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="thead-light">
                 <tr>
                     <th>Job ID</th>
-                    <th>Care Seeker</th>
                     <th>Required Service</th>
                     <th>Detail</th>
                     <th>Address</th>
                     <th>Estimated Hourly Budget</th>
                     <th>Time of Service</th>
                     <th>Status</th>
-                    <th>Update Status</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($jobs as $job) : ?>
                     <tr>
                         <td><?php echo $job['id']; ?></td>
-                        <td><?php echo $job['full_name']; ?></td>
                         <td><?php echo $job['required_service']; ?></td>
                         <td><?php echo $job['detail']; ?></td>
                         <td><?php echo $job['address']; ?></td>
                         <td><?php echo $job['estimated_hourly_budget']; ?></td>
                         <td><?php echo $job['time_of_service']; ?></td>
                         <td><?php echo $job['status']; ?></td>
-                        <td>
-                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                                <input type="hidden" name="job_id" value="<?php echo $job['id']; ?>">
-                                <select name="new_status" class="form-control">
-                                    <option value="pending">Pending</option>
-                                    <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
-                                </select>
-                                <input type="submit" name="update_status" value="Update" class="btn btn-primary mt-2">
-                            </form>
-                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>
-

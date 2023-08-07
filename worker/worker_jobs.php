@@ -2,19 +2,20 @@
 session_start();
 include('config.php');
 
-// Check if the user is logged in as an admin
-if (!isset($_SESSION["usertype"]) || $_SESSION["usertype"] !== "admin") {
-    header("Location: admin_login.php");
+// Check if the user is logged in as a support worker
+if (!isset($_SESSION["usertype"]) || $_SESSION["usertype"] !== "support_worker") {
+    header("Location: worker_login.php");
     exit;
 }
 
-// Fetch accepted job details
-$select_accepted_jobs_query = "SELECT ja.*, j.required_service, cs.full_name AS careseeker_name, cs.email AS careseeker_email, cs.contact_number AS careseeker_contact, 
-                               sw.full_name AS worker_name, sw.email AS worker_email, sw.contact_number AS worker_contact
+$worker_id = $_SESSION["user_id"];
+
+// Fetch accepted job details for the support worker
+$select_accepted_jobs_query = "SELECT ja.*, j.required_service, cs.full_name AS careseeker_name, cs.email AS careseeker_email, cs.contact_number AS careseeker_contact
                                FROM job_accepted ja
                                INNER JOIN jobs j ON ja.job_id = j.id
                                INNER JOIN care_seekers cs ON ja.careseeker_id = cs.id
-                               INNER JOIN support_workers sw ON ja.worker_id = sw.id
+                               WHERE ja.worker_id = $worker_id
                                ORDER BY ja.accepted_date DESC";
 $accepted_jobs_result = $conn->query($select_accepted_jobs_query);
 $accepted_jobs = [];
@@ -79,12 +80,12 @@ $conn->close();
 
 </head>
 <body>
-<?php include('admin_navbar.php'); ?>
+<?php include('navbar.php'); ?>
 
 <div class="container mt-4">
-    <h3>View Accepted Jobs Information</h3>
+    <h3>Accepted Jobs</h3>
 
-    <div class="table-responsive mt-4">
+    <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="thead-light">
                 <tr>
@@ -93,9 +94,6 @@ $conn->close();
                     <th>Care Seeker Name</th>
                     <th>Care Seeker Email</th>
                     <th>Care Seeker Contact</th>
-                    <th>Assigned Support Worker</th>
-                    <th>Worker Email</th>
-                    <th>Worker Contact</th>
                     <th>Accepted Date</th>
                 </tr>
             </thead>
@@ -107,9 +105,6 @@ $conn->close();
                         <td><?php echo $job['careseeker_name']; ?></td>
                         <td><?php echo $job['careseeker_email']; ?></td>
                         <td><?php echo $job['careseeker_contact']; ?></td>
-                        <td><?php echo $job['worker_name']; ?></td>
-                        <td><?php echo $job['worker_email']; ?></td>
-                        <td><?php echo $job['worker_contact']; ?></td>
                         <td><?php echo $job['accepted_date']; ?></td>
                     </tr>
                 <?php endforeach; ?>
@@ -121,6 +116,5 @@ $conn->close();
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

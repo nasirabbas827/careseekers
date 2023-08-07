@@ -43,32 +43,83 @@ $conn->close();
 <html>
 <head>
     <title>Edit Category</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+    body{
+        background-color: aquamarine;
+    }
+    h1, h2, h3, h4{
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+        border: 1px solid #dee2e6;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+    }
+
+    .table img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    .btn-primary {
+        padding: 5px 10px;
+    }
+
+</style>
 </head>
 <body>
 <?php include('admin_navbar.php'); ?>
 
-<h3>Edit Category</h3>
-<?php
-if (isset($category_updated)) {
-    echo "<p style='color: green;'>Category updated successfully!</p>";
-} elseif (isset($category_update_error)) {
-    echo "<p style='color: red;'>$category_update_error</p>";
-} elseif (isset($category_not_found)) {
-    echo "<p style='color: red;'>Category not found.</p>";
-}
-?>
+<div class="container mt-4">
+    <h3>Edit Category</h3>
+    <?php
+    if (isset($category_updated)) {
+        echo "<p class='text-success'>Category updated successfully!</p>";
+    } elseif (isset($category_update_error)) {
+        echo "<p class='text-danger'>$category_update_error</p>";
+    } elseif (isset($category_not_found)) {
+        echo "<p class='text-danger'>Category not found.</p>";
+    }
+    ?>
 
-<?php if (isset($category)) : ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-        <input type="hidden" name="category_id" value="<?php echo $category['id']; ?>">
-        <label for="category_name">Category Name:</label>
-        <input type="text" id="category_name" name="category_name" value="<?php echo $category['name']; ?>" required><br><br>
+    <?php if (isset($category)) : ?>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+            <input type="hidden" name="category_id" value="<?php echo $category['id']; ?>">
+            <div class="form-group">
+                <label for="category_name">Category Name:</label>
+                <input type="text" class="form-control" id="category_name" name="category_name" value="<?php echo $category['name']; ?>" required>
+            </div>
+            <button type="submit" class="btn btn-primary mr-3">Update Category</button>
+    <a href="view_categories.php" class="btn btn-success">Back to Manage Categories</a><br>
 
-        <input type="submit" value="Update Category">
-    </form>
-<?php endif; ?>
+        </form>
+    <?php endif; ?>
+</div>
 
-<br>
-<a href="view_categories.php">Back to Manage Categories</a><br>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

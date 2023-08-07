@@ -40,35 +40,93 @@ $conn->close();
 <html>
 <head>
     <title>Manage Categories</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+    body{
+        background-color: aquamarine;
+    }
+    h1, h2, h3, h4{
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+        border: 1px solid #dee2e6;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+    }
+
+    .table img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    .btn-primary {
+        padding: 5px 10px;
+    }
+
+</style>
+
 </head>
 <body>
 <?php include('admin_navbar.php'); ?>
 
-<h3>Manage Categories</h3>
-<?php
-if (isset($category_deleted)) {
-    echo "<p style='color: green;'>Category deleted successfully!</p>";
-} elseif (isset($category_delete_error)) {
-    echo "<p style='color: red;'>$category_delete_error</p>";
-}
-?>
+<div class="container mt-4">
+    <h3>Manage Categories</h3>
+    <?php
+    if (isset($category_deleted)) {
+        echo "<p class='text-success'>Category deleted successfully!</p>";
+    } elseif (isset($category_delete_error)) {
+        echo "<p class='text-danger'>$category_delete_error</p>";
+    }
+    ?>
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Category ID</th>
+                    <th>Category Name</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($categories as $category) : ?>
+                    <tr>
+                        <td><?php echo $category['id']; ?></td>
+                        <td><?php echo $category['name']; ?></td>
+                        <td><a href="edit_category.php?id=<?php echo $category['id']; ?>" class="btn btn-primary">Edit</a></td>
+                        <td>
+                            <a href="?delete=<?php echo $category['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<table>
-    <tr>
-        <th>Category ID</th>
-        <th>Category Name</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    <?php foreach ($categories as $category) : ?>
-        <tr>
-            <td><?php echo $category['id']; ?></td>
-            <td><?php echo $category['name']; ?></td>
-            <td><a href="edit_category.php?id=<?php echo $category['id']; ?>">Edit</a></td>
-            <td><a href="?delete=<?php echo $category['id']; ?>" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a></td>
-        </tr>
-    <?php endforeach; ?>
-</table>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

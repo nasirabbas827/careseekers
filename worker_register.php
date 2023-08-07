@@ -59,58 +59,131 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
     <title>Support Worker Registration</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+    body{
+        background-color: aquamarine;
+    }
+    h1, h2, h3, h4{
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+        border: 1px solid #dee2e6;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+    }
+
+    .table img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    .btn-primary {
+        padding: 5px 10px;
+    }
+
+</style>
+
+
 </head>
 <body>
 <?php include('navbar.php'); ?>
 
-<h3>Support Worker Registration</h3>
+<div class="container mt-4">
+    <h3 class="mb-4">Support Worker Registration</h3>
 
-<?php
-if (isset($registration_success)) {
-    echo "<p style='color: green;'>Registration submitted successfully! Awaiting admin approval.</p>";
-} elseif (isset($registration_error)) {
-    echo "<p style='color: red;'>$registration_error</p>";
-} elseif (isset($existing_error)) {
-    echo "<p style='color: red;'>$existing_error</p>";
-}
-?>
+    <?php
+    if (isset($registration_success)) {
+        echo "<p style='color: green;'>Registration submitted successfully! Awaiting admin approval.</p>";
+    } elseif (isset($registration_error)) {
+        echo "<p style='color: red;'>$registration_error</p>";
+    } elseif (isset($existing_error)) {
+        echo "<p style='color: red;'>$existing_error</p>";
+    }
+    ?>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-    <label for="full_name">Full Name:</label>
-    <input type="text" id="full_name" name="full_name" required><br><br>
-    
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    
-    <label for="contact_number">Contact Number:</label>
-    <input type="tel" id="contact_number" name="contact_number" required><br><br>
-    
-    <label for="picture">Picture:</label>
-    <input type="file" id="picture" name="picture" accept="image/*" required><br><br>
-    
-    <label for="hourly_rate">Hourly Rate:</label>
-    <input type="number" id="hourly_rate" name="hourly_rate" required><br><br>
-    
-    <label for="experience">Experience:</label>
-    <textarea id="experience" name="experience" required></textarea><br><br>
-    
-    <label for="reference1">Reference 1:</label>
-    <input type="text" id="reference1" name="reference1" required><br><br>
-    
-    <label for="reference2">Reference 2:</label>
-    <input type="text" id="reference2" name="reference2" required><br><br>
-    
-    <label for="category">Category:</label>
-    <select id="category" name="category">
-        <?php foreach ($categories as $category) : ?>
-            <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
-        <?php endforeach; ?>
-    </select><br><br>
-    
-    <input type="submit" value="Submit Registration">
-</form>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="contact_number">Contact Number:</label>
+            <input type="tel" id="contact_number" name="contact_number" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="picture">Picture:</label>
+            <input type="file" id="picture" name="picture" accept="image/*" class="form-control-file" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="hourly_rate">Hourly Rate:</label>
+            <input type="number" id="hourly_rate" name="hourly_rate" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="experience">Experience:</label>
+            <textarea id="experience" name="experience" class="form-control" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="reference1">Reference 1:</label>
+            <input type="text" id="reference1" name="reference1" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="reference2">Reference 2:</label>
+            <input type="text" id="reference2" name="reference2" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category" class="form-control">
+                <?php foreach ($categories as $category) : ?>
+                    <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit Registration</button>
+    </form>
+</div>
+
+<!-- Add Bootstrap JS scripts at the end of the body -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
