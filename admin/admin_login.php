@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
 
     // Assuming you have an "admins" table with fields "username" and "password"
-    $sql = "SELECT id FROM admins WHERE username = '$username' AND password = '$password'";
+    $sql = "SELECT id FROM admins WHERE username = '$username' AND password = "YOUR_OWN_API_KEY"";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 1) {
