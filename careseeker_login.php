@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Check if care seeker exists and password matches
-    $login_query = "SELECT * FROM care_seekers WHERE email = '$email' AND password = '$password'";
+    $login_query = "SELECT * FROM care_seekers WHERE email = '$email' AND password = "YOUR_OWN_API_KEY"";
     $login_result = $conn->query($login_query);
 
     if ($login_result->num_rows == 1) {
