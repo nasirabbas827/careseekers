@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Check if the provided email and password match a registered support worker
-    $login_query = "SELECT * FROM support_workers WHERE email = '$email' AND password = '$password' AND status = 'approved'";
+    $login_query = "SELECT * FROM support_workers WHERE email = '$email' AND password = "YOUR_OWN_API_KEY" AND status = 'approved'";
     $login_result = $conn->query($login_query);
 
     if ($login_result->num_rows > 0) {
